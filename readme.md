@@ -151,10 +151,13 @@ and call the function(s) defined within **amx-controlports-control** from the ma
 
 	data_event [dvProjector]
 	{
-		amxSerialSetBaud (dvProjector, AMX_SERIAL_BAUD_RATE_9600, AMX_SERIAL_BAUD_PARITY_NONE, AMX_SERIAL_STOP_BITS_1, AMX_SERIAL_485_DISABLE)
-		amxSerialDisableHardwareHandshaking (dvProjector)
-		amxSerialDisableSoftwareHandshaking (dvProjector)
-		amxSerialEnableRx (dvProjector)
+		online:
+		{
+			amxSerialSetBaud (dvProjector, AMX_SERIAL_BAUD_RATE_9600, AMX_SERIAL_BAUD_PARITY_NONE, AMX_SERIAL_STOP_BITS_1, AMX_SERIAL_485_DISABLE)
+			amxSerialDisableHardwareHandshaking (dvProjector)
+			amxSerialDisableSoftwareHandshaking (dvProjector)
+			amxSerialEnableRx (dvProjector)
+		}
 	}
 
 ---------------------------------------------------------------
