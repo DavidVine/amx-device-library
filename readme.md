@@ -16,7 +16,9 @@ The built-in constants and control functions assist you by simplifying control a
 
 Everything is a function!
 
-Consistent, descriptive control function names within **amx-device-control** replace the typical NetLinx keywords and syntax for channel/level control and sending strings/commands to AMX or 3rd party devices. E.g:
+Consistent, descriptive control function names within **amx-device-control** replace the typical NetLinx keywords and syntax for channel/level control and sending strings/commands to AMX or 3rd party devices.
+
+E.g:
 
 	/*
 	 * --------------------
@@ -32,6 +34,8 @@ Consistent, descriptive control function names within **amx-device-control** rep
 	{
 		on [device, chan]
 	}
+
+E.g:
 
 	/*
 	 * --------------------
