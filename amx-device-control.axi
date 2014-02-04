@@ -11,7 +11,7 @@ integer ADDRESS_CODE_WILDCARD = 0
 integer CHANNEL_CODE_WILDCARD = 0
 integer LEVEL_CODE_WILDCARD = 0
 
-char STRING_EMPTY[]	= ''
+char STRING_EMPTY[] = ''
 
 
 /*
@@ -24,8 +24,8 @@ char STRING_EMPTY[]	= ''
  * --------------------
  * Function: channelOn
  *
- * Parameters:	dev device - device
- * 				integer chan - channel code
+ * Parameters:  dev device - device
+ *              integer chan - channel code
  * 
  * Description: Turn a channel on.
  * --------------------
@@ -39,8 +39,8 @@ define_function channelOn (dev device, integer chan)
  * --------------------
  * Function: channelOff
  *
- * Parameters:	dev device - device
- * 				integer chan - channel code
+ * Parameters:  dev device - device
+ *              integer chan - channel code
  * 
  * Description: Turn a channel off.
  * --------------------
@@ -54,8 +54,8 @@ define_function channelOff (dev device, integer chan)
  * --------------------
  * Function: channelPulse
  *
- * Parameters:	dev device - device
- * 				integer chan - channel code
+ * Parameters:  dev device - device
+ *              integer chan - channel code
  * 
  * Description: Pulse a channel.
  * --------------------
@@ -69,15 +69,15 @@ define_function channelPulse (dev device, integer chan)
  * --------------------
  * Function: channelTo
  *
- * Parameters:	dev device - device
- * 				integer chan - channel code
+ * Parameters:  dev device - device
+ *              integer chan - channel code
  * 
  * Description: Turn an output channel on for as long as a corresponding input
- *		channel is held on.
+ *              channel is held on.
  *
- * Note: TO statements that occur outside the data flow of PUSH events/statements 
- *		may not work. Only call this function from within the PUSH statement of 
- *		a BUTTON_EVENT.
+ * Note:        TO statements that occur outside the data flow of PUSH events/statements 
+ *              may not work. Only call this function from within the PUSH statement of 
+ *              a BUTTON_EVENT.
  * --------------------
  */
 define_function channelTo (dev device, integer chan)
@@ -89,15 +89,15 @@ define_function channelTo (dev device, integer chan)
  * --------------------
  * Function: channelMinTo
  *
- * Parameters:	dev device - device
- * 				integer chan - channel code
+ * Parameters:  dev device - device
+ *              integer chan - channel code
  * 
  * Description: Turn an output channel on for as long as a corresponding input
- *		channel is held on or at least 1/2 a second, whichever is longer.
+ *              channel is held on or at least 1/2 a second, whichever is longer.
  *
- * Note: TO statements that occur outside the data flow of PUSH events/statements 
- *		may not work. Only call this function from within the PUSH statement of 
- *		a BUTTON_EVENT.
+ * Note:        TO statements that occur outside the data flow of PUSH events/statements 
+ *              may not work. Only call this function from within the PUSH statement of 
+ *              a BUTTON_EVENT.
  * --------------------
  */
 define_function channelMinTo (dev device, integer chan)
@@ -109,8 +109,8 @@ define_function channelMinTo (dev device, integer chan)
  * --------------------
  * Function: channelToggle
  *
- * Parameters:	dev device - device
- * 				integer chan - channel code
+ * Parameters:  dev device - device
+ *              integer chan - channel code
  * 
  * Description: Toggle a channel.
  * --------------------
@@ -124,9 +124,9 @@ define_function channelToggle (dev device, integer chan)
  * --------------------
  * Function: channelSet
  *
- * Parameters:	dev device - device
- * 				integer chan - channel code
- *				integer status - status (TRUE or FALSE)
+ * Parameters:  dev device - device
+ *              integer chan - channel code
+ *              integer status - status (TRUE or FALSE)
  * 
  * Description: Turn a channel on or off based on the status parameter.
  * --------------------
@@ -140,9 +140,9 @@ define_function channelSet (dev device, integer chan, integer status)
  * --------------------
  * Function: sendLevel
  *
- * Parameters:	dev device - device
- * 				integer lev - level code
- *				integer val - level value
+ * Parameters:  dev device - device
+ *              integer lev - level code
+ *              integer val - level value
  * 
  * Description: Send a level value to an AMX device.
  * --------------------
@@ -156,8 +156,8 @@ define_function sendLevel (dev device, integer lev, integer val)
  * --------------------
  * Function: sendString
  *
- * Parameters:	dev device - device
- *				char str[] - string
+ * Parameters:  dev device - device
+ *              char str[] - string
  * 
  * Description: Send a string through an AMX device to a connected device.
  * --------------------
@@ -171,8 +171,8 @@ define_function sendString (dev device, char str[])
  * --------------------
  * Function: sendCommand
  *
- * Parameters:	dev device - device
- *				char cmd[] - command
+ * Parameters:  dev device - device
+ *              char cmd[] - command
  * 
  * Description: Send a command to an AMX device.
  * --------------------
