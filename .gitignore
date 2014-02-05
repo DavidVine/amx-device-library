@@ -1,0 +1,10 @@
+# Compiled source #
+###################
+*.tkn
+*.tko
+*.src
+
+# Documents #
+###################
+*.pdf
+*.doc
