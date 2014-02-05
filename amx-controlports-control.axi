@@ -5,56 +5,7 @@ program_name='amx-controlports-control'
 
 
 include 'amx-device-control'
-
-
-define_constant
-
-char AMX_SERIAL_BAUD_RATE_115200[]  = '115200'
-char AMX_SERIAL_BAUD_RATE_76800[]   = '76800'
-char AMX_SERIAL_BAUD_RATE_57600[]   = '57600'
-char AMX_SERIAL_BAUD_RATE_38400[]   = '38400'
-char AMX_SERIAL_BAUD_RATE_19200[]   = '19200'
-char AMX_SERIAL_BAUD_RATE_9600[]    = '9600'
-char AMX_SERIAL_BAUD_RATE_4800[]    = '4800'
-char AMX_SERIAL_BAUD_RATE_2400[]    = '2400'
-char AMX_SERIAL_BAUD_RATE_1200[]    = '1200'
-char AMX_SERIAL_BAUD_RATE_600[]     = '600'
-char AMX_SERIAL_BAUD_RATE_300[]     = '300'
-char AMX_SERIAL_BAUD_RATE_150[]     = '150'
-
-char AMX_SERIAL_BAUD_PARITY_NONE[]  = 'N'
-char AMX_SERIAL_BAUD_PARITY_ODD[]   = 'O'
-char AMX_SERIAL_BAUD_PARITY_EVEN[]  = 'E'
-char AMX_SERIAL_BAUD_PARITY_MARK[]  = 'M'
-char AMX_SERIAL_BAUD_PARITY_SPACE[] = 'S'
-
-char AMX_SERIAL_DATA_BITS_8[]   = '8'
-char AMX_SERIAL_DATA_BITS_9[]   = '9' // only valid with no parity and 1 stop bit
-
-char AMX_SERIAL_STOP_BITS_1[]   = '1'
-char AMX_SERIAL_STOP_BITS_2[]   = '2'
-
-char AMX_SERIAL_485_ENABLE[]    = '485 Enable'
-char AMX_SERIAL_485_DISABLE[]   = '485 Disable'
-char AMX_SERIAL_485_IGNORE[]    = ''
-
-
-char AMX_IO_STATE_HIGH[]    = 'HIGH'
-char AMX_IO_STATE_LOW[]     = 'LOW'
-
-
-char AMX_IR_BAUD_RATE_19200[]   = '19200'
-char AMX_IR_BAUD_RATE_9600[]    = '9600'
-char AMX_IR_BAUD_RATE_4800[]    = '4800'
-char AMX_IR_BAUD_RATE_2400[]    = '2400'
-char AMX_IR_BAUD_RATE_1200[]    = '1200'
-
-char AMX_IR_MODE_SERIAL[]   = 'SERIAL'
-char AMX_IR_MODE_DATA[]     = 'DATA'
-char AMX_IR_MODE_IR[]       = 'IR'
-
-
-
+include 'amx-controlports-api'
 
 
 
@@ -75,7 +26,7 @@ char AMX_IR_MODE_IR[]       = 'IR'
  */
 define_function amxControllerEnableLeds (dev controllerPort1)
 {
-	sendCommand (controllerPort1, 'LED-EN')
+	sendCommand (controllerPort1, "CONTROLLER_COMMAND_ENABLE_LEDS")
 }
 
 /*
@@ -89,7 +40,7 @@ define_function amxControllerEnableLeds (dev controllerPort1)
  */
 define_function amxControllerDisableLeds (dev controllerPort1)
 {
-	sendCommand (controllerPort1, 'LED-DIS')
+	sendCommand (controllerPort1, "CONTROLLER_COMMAND_DISABLE_LEDS")
 }
 
 
@@ -156,7 +107,7 @@ define_function amxRelayPulse (dev relays, integer relayChannel)
  
 define_constant
 
-integer AMX_SERIAL_PORT_CTS_CHANNEL = 255
+integer SERIAL_PORT_CTS_CHANNEL = 255
 
 /*
 define_function amxSerial....
@@ -186,10 +137,10 @@ define_function amxSerial....
  */
 define_function amxSerialSetBaud (dev serialPort, char baudRate[], char parity[], char dataBits[], char stopBits[], char status485[])
 {
-	if (status485 == AMX_SERIAL_485_IGNORE)
-		sendCommand (serialPort, "'SET BAUD ',baudRate,',',parity,',',dataBits,',',stopBits")
+	if (status485 == SERIAL_485_IGNORE)
+		sendCommand (serialPort, "SERIAL_COMMAND_BAUD_CONFIGURE,baudRate,',',parity,',',dataBits,',',stopBits")
 	else
-		sendCommand (serialPort, "'SET BAUD ',baudRate,',',parity,',',dataBits,',',stopBits,' ',status485")
+		sendCommand (serialPort, "SERIAL_COMMAND_BAUD_CONFIGURE,baudRate,',',parity,',',dataBits,',',stopBits,' ',status485")
 }
 
 /*
@@ -209,10 +160,10 @@ define_function amxSerialSetBaud (dev serialPort, char baudRate[], char parity[]
  */
 define_function amxSerialSetBaudTemporary (dev serialPort, char baudRate[], char parity[], char dataBits[], char stopBits[], char status485[])
 {
-	if (status485 == AMX_SERIAL_485_IGNORE)
-		sendCommand (serialPort, "'TSET BAUD ',baudRate,',',parity,',',dataBits,',',stopBits")
+	if (status485 == SERIAL_485_IGNORE)
+		sendCommand (serialPort, "SERIAL_COMMAND_BAUD_CONFIGURE_TEMPORARY,baudRate,',',parity,',',dataBits,',',stopBits")
 	else
-		sendCommand (serialPort, "'TSET BAUD ',baudRate,',',parity,',',dataBits,',',stopBits,' ',status485")
+		sendCommand (serialPort, "SERIAL_COMMAND_BAUD_CONFIGURE_TEMPORARY,baudRate,',',parity,',',dataBits,',',stopBits,' ',status485")
 }
 
 /*
@@ -226,7 +177,7 @@ define_function amxSerialSetBaudTemporary (dev serialPort, char baudRate[], char
  */
 define_function amxSerialRequestBaud (dev serialPort)
 {
-	sendCommand (serialPort, 'GET BAUD')
+	sendCommand (serialPort, "SERIAL_COMMAND_BAUD_REQUEST")
 }
 
 /*
@@ -240,7 +191,7 @@ define_function amxSerialRequestBaud (dev serialPort)
  */
 define_function amxSerialDisableHardwareHandshaking (dev serialPort)
 {
-	sendCommand (serialPort, 'HSOFF')
+	sendCommand (serialPort, "SERIAL_COMMAND_HARDWARE_HANDSHAKING_OFF")
 }
 
 /*
@@ -254,7 +205,7 @@ define_function amxSerialDisableHardwareHandshaking (dev serialPort)
  */
 define_function amxSerialEnableHardwareHandshaking (dev serialPort)
 {
-	sendCommand (serialPort, 'HSON')
+	sendCommand (serialPort, "SERIAL_COMMAND_HARDWARE_HANDSHAKING_ON")
 }
 
 /*
@@ -268,7 +219,7 @@ define_function amxSerialEnableHardwareHandshaking (dev serialPort)
  */
 define_function amxSerialDisableSoftwareHandshaking (dev serialPort)
 {
-	sendCommand (serialPort, 'XOFF')
+	sendCommand (serialPort, "SERIAL_COMMAND_SOFTWARE_HANDSHAKING_OFF")
 }
 
 /*
@@ -282,7 +233,7 @@ define_function amxSerialDisableSoftwareHandshaking (dev serialPort)
  */
 define_function amxSerialEnableSoftwareHandshaking (dev serialPort)
 {
-	sendCommand (serialPort, 'XON')
+	sendCommand (serialPort, "SERIAL_COMMAND_SOFTWARE_HANDSHAKING_ON")
 }
 
 /*
@@ -296,7 +247,7 @@ define_function amxSerialEnableSoftwareHandshaking (dev serialPort)
  */
 define_function amxSerialClearRxBuffer (dev serialPort)
 {
-	sendCommand (serialPort, 'RXCLR')
+	sendCommand (serialPort, "SERIAL_COMMAND_CLEAR_RECEIVE_BUFFER")
 }
 
 /*
@@ -310,7 +261,7 @@ define_function amxSerialClearRxBuffer (dev serialPort)
  */
 define_function amxSerialClearTxBuffer (dev serialPort)
 {
-	sendCommand (serialPort, 'TXCLR')
+	sendCommand (serialPort, "SERIAL_COMMAND_CLEAR_TRANSMIT_BUFFER")
 }
 
 /*
@@ -324,7 +275,7 @@ define_function amxSerialClearTxBuffer (dev serialPort)
  */
 define_function amxSerialEnableRx (dev serialPort)
 {
-	sendCommand (serialPort, 'RXON')
+	sendCommand (serialPort, "SERIAL_COMMAND_RECEIVED_DATA_PROCESS")
 }
 
 /*
@@ -338,7 +289,7 @@ define_function amxSerialEnableRx (dev serialPort)
  */
 define_function amxSerialDisableRx (dev serialPort)
 {
-	sendCommand (serialPort, 'RXOFF')
+	sendCommand (serialPort, "SERIAL_COMMAND_RECEIVED_DATA_IGNORE")
 }
 
 /*
@@ -354,7 +305,7 @@ define_function amxSerialDisableRx (dev serialPort)
  */
 define_function amxSerialSetTxCharDelayTimeInMicroseconds (dev serialPort, integer microseconds)
 {
-	sendCommand (serialPort, "'CHARD-',itoa(microseconds)")
+	sendCommand (serialPort, "SERIAL_COMMAND_TRANSMIT_CHARACTER_DELAY_MICROSECONDS,itoa(microseconds)")
 }
 
 /*
@@ -370,7 +321,7 @@ define_function amxSerialSetTxCharDelayTimeInMicroseconds (dev serialPort, integ
  */
 define_function amxSerialSetTxCharDelayTimeInMilliseconds (dev serialPort, integer milliseconds)
 {
-	sendCommand (serialPort, "'CHARDM-',itoa(milliseconds)")
+	sendCommand (serialPort, "SERIAL_COMMAND_TRANSMIT_CHARACTER_DELAY_MILLISECONDS,itoa(milliseconds)")
 }
 
 /*
@@ -384,7 +335,7 @@ define_function amxSerialSetTxCharDelayTimeInMilliseconds (dev serialPort, integ
  */
 define_function amxSerialEnableCtsReporting (dev serialPort)
 {
-	sendCommand (serialPort, 'CTSPSH')
+	sendCommand (serialPort, "SERIAL_COMMAND_CTS_REPORTING_ENABLE")
 }
 
 /*
@@ -397,7 +348,7 @@ define_function amxSerialEnableCtsReporting (dev serialPort)
  */
 define_function amxSerialDisableCtsReporting (dev serialPort)
 {
-	sendCommand (serialPort, 'CTSPSH OFF')
+	sendCommand (serialPort, "SERIAL_COMMAND_CTS_REPORTING_DISABLE")
 }
 
 
@@ -411,110 +362,131 @@ define_function amxSerialDisableCtsReporting (dev serialPort)
 
 define_function amxIrEnableCarrierSignal (dev irPort)
 {
-	sendCommand (irPort, 'CARON')
+	sendCommand (irPort, "IR_COMMAND_CARRIER_ON")
 }
 
 define_function amxIrDisableCarrierSignal (dev irPort)
 {
-	sendCommand (irPort, 'CAROFF')
+	sendCommand (irPort, "IR_COMMAND_CARRIER_OFF")
 }
 
 define_function amxIrSendChannelNumber (dev irPort, integer channelNum)
 {
-	sendCommand (irPort, "'CH',channelNum")    // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
+	sendCommand (irPort, "IR_COMMAND_CHANNEL_SET_CHANNEL,channelNum")    // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
 }
 
-define_function amxIrClearBufferSendCode (dev irPort, integer irChannel)
+define_function amxIrClearBufferSendCode (dev irPort, integer irCde)
 {
-	sendCommand (irPort, "'CP',irChannel")     // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
+	sendCommand (irPort, "IR_COMMAND_HALT_AND_CLEAR_ALL_ACTIVE_AND_BUFFERED_IR_SEND_PULSE,irCde")     // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
 }
 
 define_function amxIrSetOffTime (dev irPort, integer offTime)
 {
-	sendCommand (irPort, "'CTOF',offTime")     // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
+	sendCommand (irPort, "IR_COMMAND_DURATION_OFF_TIME_BETWEEN_PULSES,offTime")     // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
 }
 
 define_function amxIrSetOnTime (dev irPort, integer onTime)
 {
-	sendCommand (irPort, "'CTON',onTime")      // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
+	sendCommand (irPort, "IR_COMMAND_DURATION_ON_TIME_PULSE,onTime")      // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
 }
 
 define_function amxIrRequestBaud (dev irPort)
 {
-	sendCommand (irPort, "'GET BAUD'")
+	sendCommand (irPort, "IR_COMMAND_BAUD_REQUEST")
 }
 
 define_function amxIrRequestMode (dev irPort)
 {
-	sendCommand (irPort, "'GET MODE'")
+	sendCommand (irPort, "IR_COMMAND_MODE_REQUEST")
 }
 
 define_function amxIrClearBuffer (dev irPort)
 {
-	sendCommand (irPort, "'IROFF'")
+	sendCommand (irPort, "IR_COMMAND_HALT_AND_CLEAR_ALL_ACTIVE_AND_BUFFERED_IR")
+}
+
+
+define_function amxIrDisableIoLinkPowerSettings (dev irPort)
+{
+	sendCommand (irPort, IR_COMMAND_DISABLE_IO_LINK_POWER_SETTINGS)
 }
 
 /*
-define_function amxIrDisable.....
+define_function amxIr....
 {
-	sendCommand (irPort, "'POD'")
+	sendCommand (irPort, "IR_COMMAND_TURN_OFF_DEVICE_BASED_ON_IO_LINK_STATUS")
+}
+
+define_function amxIr....
+{
+	sendCommand (irPort, "IR_COMMAND_TURN_ON_DEVICE_BASED_ON_IO_LINK_STATUS")
 }
 
 
 define_function amxIr....
 {
-	sendCommand (irPort, "'POF'")
+	sendCommand (irPort, "IR_COMMAND_DURATION_OFF_TIME_BETWEEN_POWER_PULSES")
 }
 
 define_function amxIr....
 {
-	sendCommand (irPort, "'PON'")
-}
-
-
-define_function amxIr....
-{
-	sendCommand (irPort, "'PTOF'")
-}
-
-define_function amxIr....
-{
-	sendCommand (irPort, "'PTON'")
+	sendCommand (irPort, "IR_COMMAND_DURATION_ON_TIME_POWER_PULSES")
 }
 */
 
 define_function amxIrSetBaud (dev irPort, char baudRate[], char parity[], char dataBits[], char stopBits[])
 {
-	sendCommand (irPort, "'SET BAUD ',baudRate,',',parity,',',dataBits,',',stopBits")
+	sendCommand (irPort, "IR_COMMAND_BAUD_CONFIGURE,baudRate,',',parity,',',dataBits,',',stopBits")
 }
 
 
 define_function amxIrSetIoLink (dev irPort, integer ioChannel)
 {
-	sendCommand (irPort, "'SET IO LINK ',itoa(ioChannel)")
+	sendCommand (irPort, "IR_COMMAND_IO_LINK,itoa(ioChannel)")
 }
 
 define_function amxIrSetMode (dev irPort, char mode[])
 {
-	sendCommand (irPort, "'SET MODE ',mode")
+	switch (mode)
+	{
+		case IR_MODE_SERIAL:
+		case IR_MODE_DATA:
+		case IR_MODE_IR:
+		{
+			sendCommand (irPort, "IR_COMMAND_MODE,mode")
+		}
+	}
 }
 
-define_function amxIrStackPulse (dev irPort, integer irChannel)
+define_function amxIrStackPulse (dev irPort, integer irCde)
 {
-	sendCommand (irPort, "'SP',irChannel") // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
+	sendCommand (irPort, "IR_COMMAND_SINGLE_IR_PULSE,irCde") // note: deliberate lack of itoa converstion - command needs raw data value not ASCII number
 }
 
-/*
-define_function amxIr
+
+define_function amxIrPulseUsingPatten (dev irPort, integer irChannel)
 {
-	sendCommand (irPort, "'XCH'")
+	sendCommand (irPort, "IR_COMMAND_TRANSMIT_CODE_USING_PATTERN,itoa(irChannel)")
 }
 
-define_function amxIr
+
+define_function amxIrSetPattern (dev irPort, char pattern[])
 {
-	sendCommand (irPort, "'XCHM'")
+	switch (pattern)
+	{
+		case IR_PATTERN_MODE_0:
+		case IR_PATTERN_MODE_1:
+		case IR_PATTERN_MODE_2:
+		case IR_PATTERN_MODE_3:
+		case IR_PATTERN_MODE_4:
+		case IR_PATTERN_MODE_5:
+		case IR_PATTERN_MODE_6:
+		{
+			sendCommand (irPort, "IR_COMMAND_CHANGE_IR_PATTERN,pattern")
+		}
+	}
 }
-*/
+
 
 
 
@@ -526,7 +498,7 @@ define_function amxIr
 
 /*
  * --------------------
- * Function: amxIoGetInputState
+ * Function: amxIoRequestInputState
  *
  * Parameters:  dev ioPort - IO port
  *              integer ioChannel - IO channel code
@@ -534,9 +506,9 @@ define_function amxIr
  * Description: Request input state of IO.
  * --------------------
  */
-define_function amxIoGetInputState (dev ioPort, integer ioChannel)
+define_function amxIoRequestInputState (dev ioPort, integer ioChannel)
 {
-	sendCommand (ioPort, "'GET INPUT ',itoa(ioChannel)")
+	sendCommand (ioPort, "IO_COMMAND_INPUT_STATE_REQUEST,itoa(ioChannel)")
 }
 
 /*
@@ -547,8 +519,8 @@ define_function amxIoGetInputState (dev ioPort, integer ioChannel)
  *              integer ioChannel - IO channel code
  *              char inputState[] - input state
  *                      Values:
- *                          AMX_IO_STATE_HIGH
- *                          AMX_IO_STATE_LOW
+ *                          IO_STATE_HIGH
+ *                          IO_STATE_LOW
  * 
  * Description: Set input state of IO.
  * --------------------
@@ -557,10 +529,10 @@ define_function amxIoSetInputState (dev ioPort, integer ioChannel, char inputSta
 {
 	switch (inputState)
 	{
-		case AMX_IO_STATE_HIGH:
-		case AMX_IO_STATE_LOW:
+		case IO_STATE_HIGH:
+		case IO_STATE_LOW:
 		{
-			sendCommand (ioPort, "'SET INPUT ',itoa(ioChannel),' ',inputState")
+			sendCommand (ioPort, "IO_COMMAND_INPUT_STATE_CONFIGURE,itoa(ioChannel),' ',inputState")
 		}
 	}
 }
