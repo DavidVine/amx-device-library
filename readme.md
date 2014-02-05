@@ -4,8 +4,10 @@ amx-device-library
 
 Files
 -----
-+ amx-controlports-control.axi
 + amx-device-control.axi
++ amx-controlports-api.axi
++ amx-controlports-control.axi
++ amx-controlports-listener.axi
 
 
 Overview
@@ -134,13 +136,31 @@ and call the function(s) defined within **amx-device-control** from the main pro
 	channelSet (dvTp, btnMute, muteStatus)
 
 
+
+amx-controlports-api
+-----------
+#####Dependencies:
++ none
+
+#####Description:
+Contains constants for AMX Control ports (serial, relays, IR, IO) NetLinx command headers and parameter values. These are used extensively by the accompanying library files **amx-controlports-control** and **amx-controlports-listener**. The constants defined within **amx-controlports-api** can also be referenced when passing values to control functions (where function parameters have a limited allowable set of values for one or more parameters) or checking to see the values of the callback function parameters.
+
+#####Usage:
+Include **amx-controlports-api** into the main program using the `#include` compiler directive. E.g:
+
+	#include 'amx-controlports-api'
+
+NOTE: If the main program file includes **amx-controlports-control** and/or **amx-controlports-listener** it is not neccessary to include **amx-controlports-api** in the main program file as well as each of them already includes **amx-controlports-api** but doing so will not cause any issues.
+
+
 amx-controlports-control
 ----------------
 #####Dependencies:
 + amx-device-control
++ amx-controlports-api
 
 #####Description:
-Contains functions for configuring the various control components of an AMX device (e.g., serial ports, relays, IR ports, IO ports).
+Contains functions for configuring the various control ports of an AMX device (serial, relays, IR, IO).
 
 #####Usage:
 Include **amx-controlports-control** into the main program using the `#include` compiler directive. E.g:
@@ -159,6 +179,127 @@ and call the function(s) defined within **amx-controlports-control** from the ma
 			amxSerialEnableRx (dvProjector)
 		}
 	}
+
+
+amx-controlports-listener
+----------------
+#####Dependencies:
++ amx-controlports-api
+
+#####Description:
+Contains dev arrays for listening to traffic returned from the AMX control ports (serial, relays, IR, IO).
+
+You should copy the required dev arrays to their main program and instantiate them with dev values corresponding to the control ports you wish to listen to.
+
+Contains commented out callback functions and events required to capture information from the AMX control ports. The events (data_events, channel_events, & level_events) will parse the information returned from the control ports and call the associated callback functions passing the information through as arguments to the call back functions' parameter list.
+
+Callback functions may be triggered from both unprompted data and responses to requests for information.
+
+#####Usage:
+Include **amx-controlports-listener** into the main program using the `#include` compiler directive. E.g:
+
+	#include 'amx-controlports-listener'
+
+Copy the required DEV arrays from **amx-controlports-listener**:
+
+	define_variable
+
+	#if_not_defined dvIoPorts
+	dev dvIoPorts[] = { 5001:9:0 }
+	#end_if
+
+to the main program file and populate the contents of the DEV arrays with only the control ports that you want to listen to. E.g:
+
+	define_device
+
+	dvIoBoardroom = 5001:17:1   // IO's on DVX-3150 in boardroom
+	dvIoMeetingRoom = 5001:9:2  // IO's on NI-2100 in meeting room
+
+	define_variable
+
+	// DEV array for IO ports copied from amx-controlports-listener
+	dev dvIoPorts[] = {dvIoBoardroom, dvIoMeetingRoom}
+
+NOTE: The order of the devices within the DEV arrays does not matter. You can also have control ports from multiple devices within the same DEV array. You can have as few (1) or as many devices defined within the DEV array as you want to listen to.
+
+Copy whichever callback functions you would like to use to monitor changes on the AMX control port or capture responses to requests for information in your main program file. The callback function should then be uncommented and the contents of the statement block filled in appropriately. The callback functions should not be uncommented within **amx-controlports-listener**. E.g:
+
+Copy an empty, commented out callback function from **amx-controlports-listener** and the associated `#define` statement:
+
+	/*
+	#define INCLUDE_CONTROLPORTS_NOTIFY_RELAY_ON_CALLBACK
+	define_function amxControlPortNotifyRelayOn (dev relayPort, integer relChanCde)
+	{
+		// relayPort is the relay port.
+		// relChanCde is the relay channel code.
+	}
+	*/
+
+paste the callback function and `#define` statement into the main program file, uncomment, and add any code statements you want:
+
+	#define INCLUDE_CONTROLPORTS_NOTIFY_RELAY_ON_CALLBACK
+	define_function amxControlPortNotifyRelayOn (dev relayPort, integer relChanCde)
+	{
+		// relayPort is the relay port.
+		// relChanCde is the relay channel code.
+
+		if (relChanCde == relProjLeftDown)
+		{
+			on[dvTp,btnProjLiftDown]    // button feedback to show user position of projector lift
+		}
+	}
+
+The callback function will be automatically triggered whenever a change occurs on the AMX control port (that initiates an unsolicted feedback response) or a response to a request for information is received.
+
+###IMPORTANT!
+1. The `#define` compiler directive found directly above the callback function within **amx-controlports-listener** must also be copied to the main program and uncommented along with the callback function itself.
+
+2. Due to the way the NetLinx compiler scans the program for `#define` staments **amx-controlports-listener** must be included in the main program file underneath any callback functions and associated `#define` statements or the callback functions will not trigger.
+
+E.g:
+
+		#program_name='main program'
+		 
+		define_device
+
+		dvProjector = 5001:1:0  // Projector connected to 1st serial port on NI-2100
+		dvAmplifier = 5001:2:0  //  Projector connected to 2nd serial port on NI-2100
+		dvRelays = 5001:4:0     // Relays on NI-2100
+		dvIos = 5001:9:0        // IO's on NI-2100 in meeting room
+		
+		define_variable
+		
+		// DEV arrays for amx-controlports-listener to use
+		dev dvSerialPorts[] = { dvProjector, dvAmplifier }
+		dev dvRelayPorts[] = { dvRelays }
+		dev dvIoPorts[] = { dvIos }
+		
+		#define INCLUDE_CONTROLPORTS_NOTIFY_SERIAL_STRING_RECEIVED_CALLBACK
+		define_function amxControlPortNotifySerialStringReceived (dev serialPort, char strReceived[])
+		{
+		}
+
+		#define INCLUDE_CONTROLPORTS_NOTIFY_RELAY_ON_CALLBACK
+		define_function amxControlPortNotifyRelayOn (dev relayPort, integer relChanCde)
+		{
+		}
+
+		#define INCLUDE_CONTROLPORTS_NOTIFY_RELAY_OFF_CALLBACK
+		define_function amxControlPortNotifyRelayOff (dev relayPort, integer relChanCde)
+		{
+		}
+
+		#define INCLUDE_CONTROLPORTS_NOTIFY_IO_INPUT_ON_CALLBACK
+		define_function amxControlPortNotifyIoInputOn (dev ioPort, integer ioChanCde)
+		{
+		}
+
+		#define INCLUDE_CONTROLPORTS_NOTIFY_IO_INPUT_OFF_CALLBACK
+		define_function amxControlPortNotifyIoInputOff (dev ioPort, integer ioChanCde)
+		{
+		}
+
+		#include 'amx-controlports-listener'
 
 ---------------------------------------------------------------
 
