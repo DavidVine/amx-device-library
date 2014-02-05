@@ -199,7 +199,7 @@ define_function amxControlPortNotifyIrIoLink (dev irPort, integer ioChannel)
  * --------------------
  */
  
- 
+ /*
 #define INCLUDE_CONTROLPORTS_NOTIFY_IO_ACTIVE_STATE_CALLBACK
 define_function amxControlPortNotifyIoActiveState (dev ioPort, integer ioChanCde, char activeState[])
 {
@@ -207,7 +207,7 @@ define_function amxControlPortNotifyIoActiveState (dev ioPort, integer ioChanCde
 	// ioChanCde is the IO channel code.
 	// activeState is the state at which the IO (acting as an input port) is considered active (IO_ACTIVE_STATE_LOW | IO_ACTIVE_STATE_HIGH)
 }
-
+*/
 
 /*
 #define INCLUDE_CONTROLPORTS_NOTIFY_IO_OUTPUT_ON_CALLBACK
