@@ -498,17 +498,18 @@ define_function amxIrSetPattern (dev irPort, char pattern[])
 
 /*
  * --------------------
- * Function: amxIoRequestInputState
+ * Function: amxIoRequestInputActiveState
  *
  * Parameters:  dev ioPort - IO port
  *              integer ioChannel - IO channel code
  * 
- * Description: Request input state of IO.
+ * Description: Request the active state of IO. Does it trigger when 
+ *              incoming voltage is high or low?
  * --------------------
  */
-define_function amxIoRequestInputState (dev ioPort, integer ioChannel)
+define_function amxIoRequestInputActiveState (dev ioPort, integer ioChannel)
 {
-	sendCommand (ioPort, "IO_COMMAND_INPUT_STATE_REQUEST,itoa(ioChannel)")
+	sendCommand (ioPort, "IO_COMMAND_INPUT_ACTIVE_STATE_REQUEST,itoa(ioChannel)")
 }
 
 /*
@@ -519,8 +520,8 @@ define_function amxIoRequestInputState (dev ioPort, integer ioChannel)
  *              integer ioChannel - IO channel code
  *              char inputState[] - input state
  *                      Values:
- *                          IO_STATE_HIGH
- *                          IO_STATE_LOW
+ *                          IO_ACTIVE_STATE_HIGH
+ *                          IO_ACTIVE_STATE_LOW
  * 
  * Description: Set input state of IO.
  * --------------------
@@ -532,7 +533,7 @@ define_function amxIoSetInputState (dev ioPort, integer ioChannel, char inputSta
 		case IO_STATE_HIGH:
 		case IO_STATE_LOW:
 		{
-			sendCommand (ioPort, "IO_COMMAND_INPUT_STATE_CONFIGURE,itoa(ioChannel),' ',inputState")
+			sendCommand (ioPort, "IO_COMMAND_INPUT_ACTIVE_STATE_CONFIGURE,itoa(ioChannel),' ',inputState")
 		}
 	}
 }
