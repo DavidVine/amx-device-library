@@ -142,39 +142,5 @@ char IR_CARRIER_DISABLED[] = 'NO CARRIER'
 char IO_ACTIVE_STATE_LOW[]  = 'ACTIVE LOW'
 char IO_ACTIVE_STATE_HIGH[] = 'ACTIVE HIGH'
 
-/*
- * --------------------
- * Useful values
- * --------------------
- */
-
-
-// Enable/Disable
-#if_not_defined cENABLE
-char cENABLE[]   = 'ENABLE'
-#end_if
-
-#if_not_defined cDISABLE
-char cDISABLE[]  = 'DISABLE'
-#end_if
-
-// Enabled/Disabled
-#if_not_defined cENABLED
-char cENABLED[]  = 'ENABLED'
-#end_if
-
-#if_not_defined cDISABLED
-char cDISABLED[] = 'DISABLED'
-#end_if
-
-// Off/On
-#if_not_defined cOFF
-char cOFF[]  = 'OFF'
-#end_if
-
-#if_not_defined cON
-char cON[]   = 'ON'
-#end_if
-
 
 #end_if
