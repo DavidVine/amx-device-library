@@ -182,4 +182,51 @@ define_function sendCommand (dev device, char cmd[])
 	send_command device, cmd
 }
 
+/*
+ * --------------------
+ * Function: irPulse
+ *
+ * Parameters:  dev device - device
+ *              integer chan - channel code
+ * 
+ * Description: Pulse a channel on an AMX IR device
+ * --------------------
+ */
+define_function irPulse (dev device, integer chan)
+{
+	channelPulse (device, chan)
+}
+
+/*
+ * --------------------
+ * Function: irOn
+ *
+ * Parameters:  dev device - device
+ *              integer chan - channel code
+ * 
+ * Description: Pulse a channel on an AMX IR device
+ * --------------------
+ */
+define_function irOn (dev device, integer chan)
+{
+	channelOn (device, chan)
+}
+
+/*
+ * --------------------
+ * Function: irOff
+ *
+ * Parameters:  dev device - device
+ *              integer chan - channel code
+ * 
+ * Description: Pulse a channel on an AMX IR device
+ * --------------------
+ */
+define_function irOff (dev device, integer chan)
+{
+	channelOff (device, chan)
+}
+
+
+
 #end_if
