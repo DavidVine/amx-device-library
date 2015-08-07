@@ -22,31 +22,32 @@ include 'amx-controlports-api'
 /*
  * --------------------
  * Device arrays
+ *
+ * Any components that are to be monitored should have the appropriate
+ * device array copied into the main program DEFINE_VARIABLE section and the 
+ * associated #DEFINE compiler directives should be copied to the top of the 
+ * main program, above the line of code that this include file is included 
+ * into the main program.
  * --------------------
  */
 
 define_variable
 
-
 // Serial ports
-#if_not_defined dvSerialPorts
+#DEFINE INCLUDE_SERIAL_PORTS_MONITOR
 dev dvSerialPorts[] = { 5001:1:0, 5001:2:0, 5001:3:0 }
-#end_if
 
 // Relay ports
-#if_not_defined dvRelayPorts
+#DEFINE INCLUDE_RELAY_PORTS_MONITOR
 dev dvRelayPorts[] = { 5001:4:0 }
-#end_if
 
 // IR ports
-#if_not_defined dvIrPorts
+#DEFINE INCLUDE_IR_PORTS_MONITOR
 dev dvIrPorts[] = { 5001:5:0, 5001:6:0, 5001:7:0, 5001:8:0 }
-#end_if
 
 // IO ports
-#if_not_defined dvIoPorts
+#DEFINE INCLUDE_IO_PORTS_MONITOR
 dev dvIoPorts[] = { 5001:9:0 }
-#end_if
 
 
 /*
@@ -261,6 +262,7 @@ define_event
  * --------------------
  */
 
+#if_defined INCLUDE_SERIAL_PORTS_MONITOR
 data_event [dvSerialPorts]
 {
 	string:
@@ -307,7 +309,9 @@ data_event [dvSerialPorts]
 		}
 	}
 }
+#end_if
 
+#if_defined INCLUDE_SERIAL_PORTS_MONITOR
 channel_event [dvSerialPorts,SERIAL_PORT_CTS_CHANNEL]
 {
 	on:
@@ -323,6 +327,7 @@ channel_event [dvSerialPorts,SERIAL_PORT_CTS_CHANNEL]
 		#end_if
 	}
 }
+#end_if
 
 
 /*
@@ -331,6 +336,7 @@ channel_event [dvSerialPorts,SERIAL_PORT_CTS_CHANNEL]
  * --------------------
  */
 
+#if_defined INCLUDE_RELAY_PORTS_MONITOR
 channel_event [dvRelayPorts,CHANNEL_CODE_WILDCARD]
 {
 	on:
@@ -346,6 +352,7 @@ channel_event [dvRelayPorts,CHANNEL_CODE_WILDCARD]
 		#end_if
 	}
 }
+#end_if
 
 
 /*
@@ -354,6 +361,7 @@ channel_event [dvRelayPorts,CHANNEL_CODE_WILDCARD]
  * --------------------
  */
 
+#if_defined INCLUDE_IR_PORTS_MONITOR
 data_event [dvIrPorts]
 {
 	string:
@@ -435,7 +443,9 @@ data_event [dvIrPorts]
 		}
 	}
 }
+#end_if
 
+#if_defined INCLUDE_IR_PORTS_MONITOR
 channel_event [dvIrPorts,CHANNEL_CODE_WILDCARD]
 {
 	on:
@@ -451,6 +461,7 @@ channel_event [dvIrPorts,CHANNEL_CODE_WILDCARD]
 		#end_if
 	}
 }
+#end_if
 
 
 /*
@@ -459,6 +470,7 @@ channel_event [dvIrPorts,CHANNEL_CODE_WILDCARD]
  * --------------------
  */
 
+#if_defined INCLUDE_IO_PORTS_MONITOR
 data_event [dvIoPorts]
 {
 	string:
@@ -480,7 +492,9 @@ data_event [dvIoPorts]
 		}
 	}
 }
+#end_if
 
+#if_defined INCLUDE_IO_PORTS_MONITOR
 button_event [dvIoPorts,CHANNEL_CODE_WILDCARD]
 {
 	push:
@@ -496,7 +510,9 @@ button_event [dvIoPorts,CHANNEL_CODE_WILDCARD]
 		#end_if
 	}
 }
+#end_if
 
+#if_defined INCLUDE_IO_PORTS_MONITOR
 channel_event [dvIoPorts,CHANNEL_CODE_WILDCARD]
 {
 	on:
@@ -512,5 +528,6 @@ channel_event [dvIoPorts,CHANNEL_CODE_WILDCARD]
 		#end_if
 	}
 }
+#end_if
 
 #end_if
